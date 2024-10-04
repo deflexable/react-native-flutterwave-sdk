@@ -2,7 +2,9 @@
 
 @interface RCT_EXTERN_MODULE(FlutterwaveSdk, NSObject)
 
-RCT_EXTERN_METHOD(multiply:(float)a withB:(float)b
+RCT_EXTERN_METHOD(toggleNightMode:(BOOL)options)
+
+RCT_EXTERN_METHOD(initializeRave:(NSDictionary *)config
                  withResolver:(RCTPromiseResolveBlock)resolve
                  withRejecter:(RCTPromiseRejectBlock)reject)
 
@@ -10,5 +12,4 @@ RCT_EXTERN_METHOD(multiply:(float)a withB:(float)b
 {
   return NO;
 }
-
 @end

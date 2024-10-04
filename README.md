@@ -1,6 +1,6 @@
 # react-native-flutterwave-sdk
 
-This library uses the official flutterwave's [android sdk](https://github.com/Flutterwave/AndroidSDK) and [ios sdk](https://github.com/Flutterwave/iOS-v3)
+This library uses the official flutterwave's native [android sdk](https://github.com/Flutterwave/AndroidSDK) and [ios sdk](https://github.com/Flutterwave/iOS-v3)
 
 ## Demo
 
@@ -124,6 +124,9 @@ initializeRaveSdk({
   theme: 'MyCustomRaveTheme',
 });
 ```
+
+## Known Issues
+The [ios sdk](https://github.com/Flutterwave/iOS-v3) library contains alot of bugs and should not be use in production. 
 
 ## Example Demo
 run the `/example` directory

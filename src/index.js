@@ -6,7 +6,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const FlutterwaveSdk = NativeModules.FlutterwaveSdk ||
+const FlutterwaveSdk = NativeModules.Mosquitodb ||
   new Proxy(
     {},
     {
@@ -41,6 +41,11 @@ export const initializeRaveSdk = async (config) => {
       bankTransferPayments,
       subAccounts,
 
+      acceptMobileMoney,
+      acceptVoucherPayment,
+
+      isPreAuth,
+      meta,
       acceptCardPayments,
       acceptAccountPayments,
       acceptMpesaPayments,
@@ -59,6 +64,30 @@ export const initializeRaveSdk = async (config) => {
       showStagingLabel,
       ...restConfig
     } = { ...config };
+
+    const platformBooleanExtras = Platform.OS === 'android' ? {
+      acceptAchPayments,
+      acceptGHMobileMoneyPayments,
+      acceptUgMobileMoneyPayments,
+      acceptZmMobileMoneyPayments,
+      acceptRwfMobileMoneyPayments,
+      acceptSaBankPayments,
+      acceptUkPayments,
+      allowSaveCardFeature,
+      shouldDisplayFee,
+      showStagingLabel,
+      acceptMpesaPayments
+    } : {
+      acceptMobileMoney,
+      acceptVoucherPayment
+    };
+
+    const platformExtras = {
+      ...platformBooleanExtras,
+      ...Platform.OS === 'android' ? {
+        francMobileMoneyPayments
+      } : {}
+    };
 
     Object.entries({
       ref,
@@ -83,7 +112,7 @@ export const initializeRaveSdk = async (config) => {
       amount <= 0
     ) throw `"amount" must be a positive number`;
 
-    if (francMobileMoneyPayments !== undefined) {
+    if (Platform.OS === 'android' && francMobileMoneyPayments !== undefined) {
       if (typeof francMobileMoneyPayments?.enabled !== 'boolean')
         throw '"francMobileMoneyPayments.enabled" must have a boolean value';
       if (typeof francMobileMoneyPayments?.country !== 'string')
@@ -101,6 +130,7 @@ export const initializeRaveSdk = async (config) => {
         duration !== undefined ||
         frequency !== undefined
       ) {
+        if (_static !== undefined) throw `either provide (static) or (duration and frequency) for field bankTransferPayments`;
         if (!Number.isInteger(duration) || duration < 0)
           throw '"bankTransferPayments.duration" must have an positive integer';
         if (!Number.isInteger(frequency) || frequency < 0)
@@ -122,23 +152,24 @@ export const initializeRaveSdk = async (config) => {
       });
     }
 
+    if (meta !== undefined) {
+      if (!Array.isArray(meta)) throw `expected "meta" to be array but got "${meta}"`;
+      meta.forEach((o, i) => {
+        if (!isObject(o)) throw `expected an object at "meta.${i}" but got "${o}"`;
+        Object.entries(o).forEach(([k, v]) => {
+          if (typeof v !== 'string') throw `expected a string at "meta.${i}.${k}" but got "${typeof v}"`;
+        });
+      });
+    }
+
     Object.entries({
       acceptCardPayments,
       acceptAccountPayments,
-      acceptMpesaPayments,
       acceptUssdPayments,
       acceptBarterPayments,
-      acceptAchPayments,
-      acceptGHMobileMoneyPayments,
-      acceptUgMobileMoneyPayments,
-      acceptZmMobileMoneyPayments,
-      acceptRwfMobileMoneyPayments,
-      acceptSaBankPayments,
-      acceptUkPayments,
       isStagingEnv,
-      allowSaveCardFeature,
-      shouldDisplayFee,
-      showStagingLabel
+      isPreAuth,
+      ...platformBooleanExtras
     }).forEach(([k, v]) => {
       if (v !== undefined && typeof v !== 'boolean')
         throw `"${k}" must have a boolean value but got "${v}"`;
@@ -162,27 +193,18 @@ export const initializeRaveSdk = async (config) => {
         narration,
         country,
         barterCountry,
+        meta,
 
-        francMobileMoneyPayments,
         bankTransferPayments,
         subAccounts,
 
         acceptCardPayments,
         acceptAccountPayments,
-        acceptMpesaPayments,
         acceptUssdPayments,
         acceptBarterPayments,
-        acceptAchPayments,
-        acceptGHMobileMoneyPayments,
-        acceptUgMobileMoneyPayments,
-        acceptZmMobileMoneyPayments,
-        acceptRwfMobileMoneyPayments,
-        acceptSaBankPayments,
-        acceptUkPayments,
         isStagingEnv,
-        allowSaveCardFeature,
-        shouldDisplayFee,
-        showStagingLabel
+        isPreAuth,
+        ...platformExtras
       })
     );
 
@@ -196,7 +218,7 @@ export const initializeRaveSdk = async (config) => {
 
 const deleteUndefinedEntity = (o) => {
   if (Array.isArray(o)) return o.map(deleteUndefinedEntity);
-  if (Object.prototype.toString.call(o) === '[object Object]')
+  if (isObject(o))
     return Object.fromEntries(
       Object.entries(o).map(([k, v]) =>
         v !== undefined && [k, deleteUndefinedEntity(v)]
@@ -204,6 +226,8 @@ const deleteUndefinedEntity = (o) => {
     );
   return o;
 };
+
+const isObject = o => Object.prototype.toString.call(o) === '[object Object]';
 
 export const toggleDarkMode = (darkMode) => {
   FlutterwaveSdk.toggleNightMode(!!darkMode);

@@ -46,9 +46,14 @@ interface RaveConfig {
      * This sets the customer's country
      */
     country?: string;
+    /**
+     * @platform android
+     */
     barterCountry?: string;
     /**
      * Set to true if you want to accept Francophone mobile money payments, else set to false . For this option to work, you should set your country to NG and your currency to XOF for West African CFA franc like Ivory Coast OR XAF for Central African CFA franc like Cameroon . See more details in the [API documentation](https://developer.flutterwave.com/reference#mobile-money-francophone).
+     * 
+     * @platform android
      */
     francMobileMoneyPayments?: FrancMobileMoneyConfig | undefined;
     /**
@@ -82,7 +87,9 @@ interface RaveConfig {
      */
     acceptAccountPayments?: boolean;
     /**
-     * Set to true if you want to accept Mpesa payments, else set to false . For this option to work, you should set `country` to KE and your currency to KES
+     * Set to true if you want to accept Mpesa payments, else set to false . For this option to work, you should set `country` to KE and your currency to KES.
+     * 
+     * @platform android
      */
     acceptMpesaPayments?: boolean;
     /**
@@ -94,31 +101,53 @@ interface RaveConfig {
      */
     acceptBarterPayments?: boolean;
     /**
-     * Set to true if you want to accept US ACH charges from your customers, else set to false . For this option to work, you should set your country to US and your currency to USD. You also have to set `acceptAccountPayments`: true
+     * @platform ios
+     */
+    acceptMobileMoney: boolean;
+    /**
+     * @platform ios
+     */
+    acceptVoucherPayment: boolean;
+    /**
+     * Set to true if you want to accept US ACH charges from your customers, else set to false . For this option to work, you should set your country to US and your currency to USD. You also have to set `acceptAccountPayments`: true.
+     * 
+     * @platform android
      */
     acceptAchPayments?: boolean;
     /**
      * Set to true if you want to accept Ghana mobile money payments, else set to false . For this option to work, you should set `country` to GH and your currency to GHS
+     * 
+     * @platform android
      */
     acceptGHMobileMoneyPayments?: boolean;
     /**
      * Set to true if you want to accept Uganda mobile money payments, else set to false . For this option to work, you should set `country` to UG and your currency to UGX
+     * 
+     * @platform android
      */
     acceptUgMobileMoneyPayments?: boolean;
     /**
      * Set to true if you want to accept Zambia mobile money payments, else set to false . For this option to work, you should set your country to NG and your currency to ZMW. MTN is the only available network at the moment, see more details in the [API documentation](https://developer.flutterwave.com/reference#zambia-mobile-money).
+     * 
+     * @platform android
      */
     acceptZmMobileMoneyPayments?: boolean;
     /**
      * Set to true if you want to accept Rwanda mobile money payments, else set to false . For this option to work, you should set your country to NG and your currency to RWF. See more details in the [API documentation](https://developer.flutterwave.com/reference#rwanda-mobile-money).
+     * 
+     * @platform android
      */
     acceptRwfMobileMoneyPayments?: boolean;
     /**
      * Set to true if you want to accept South African direct bank account payments, else set to false . For this option to work, you should set `country` to ZA and your currency to ZAR.
+     * 
+     * @platform android
      */
     acceptSaBankPayments?: boolean;
     /**
-     * Set to true if you want to accept UK Bank Account payments, else set to false . For this option to work, you should set `country` to NG, set currency to GBP, set accountbank `String`, set accountname `String`, set accountnumber `String`, set is_uk_bank_charge2 `true`, set payment_type `account`. Please use your live credentials for this
+     * Set to true if you want to accept UK Bank Account payments, else set to false . For this option to work, you should set `country` to NG, set currency to GBP, set accountbank `String`, set accountname `String`, set accountnumber `String`, set is_uk_bank_charge2 `true`, set payment_type `account`. Please use your live credentials for this.
+     * 
+     * @platform android
      */
     acceptUkPayments?: boolean;
     /**
@@ -126,15 +155,21 @@ interface RaveConfig {
      */
     isStagingEnv?: boolean;
     /**
-     * Set to true if you want to give the user the option to save their cards for future transactions. This option helps them avoid retyping their card details for every transaction. Defaults to true
+     * Set to true if you want to give the user the option to save their cards for future transactions. This option helps them avoid retyping their card details for every transaction. Defaults to true.
+     * 
+     * @platform android
      */
     allowSaveCardFeature?: boolean;
     /**
-     * Set to false to not display a dialog for confirming total amount(including charge fee) that Rave will charge. By default this is set to true
+     * Set to false to not display a dialog for confirming total amount(including charge fee) that Rave will charge. By default this is set to true.
+     * 
+     * @platform android
      */
     shouldDisplayFee?: boolean;
     /**
-     * Set to false to not display a staging label when in staging environment. By default this is set to true
+     * Set to false to not display a staging label when in staging environment. By default this is set to true.
+     * 
+     * @platform android
      */
     showStagingLabel?: boolean;
 }
