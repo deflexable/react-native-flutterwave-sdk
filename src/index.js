@@ -6,7 +6,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const FlutterwaveSdk = NativeModules.Mosquitodb ||
+const FlutterwaveSdk = NativeModules.FlutterwaveSdk ||
   new Proxy(
     {},
     {
