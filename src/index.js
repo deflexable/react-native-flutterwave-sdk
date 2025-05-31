@@ -153,12 +153,9 @@ export const initializeRaveSdk = async (config) => {
     }
 
     if (meta !== undefined) {
-      if (!Array.isArray(meta)) throw `expected "meta" to be array but got "${meta}"`;
-      meta.forEach((o, i) => {
-        if (!isObject(o)) throw `expected an object at "meta.${i}" but got "${o}"`;
-        Object.entries(o).forEach(([k, v]) => {
-          if (typeof v !== 'string') throw `expected a string at "meta.${i}.${k}" but got "${typeof v}"`;
-        });
+      if (!isObject(meta)) throw `expected an object for "meta" field but got "${meta}"`;
+      Object.entries(meta).forEach(([k, v]) => {
+        if (typeof v !== 'string') throw `expected a string at "meta.${k}" but got "${typeof v}"`;
       });
     }
 

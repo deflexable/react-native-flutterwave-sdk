@@ -1,6 +1,6 @@
 {
   "name": "react-native-flutterwave-sdk",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Flutterwave's native SDK in React Native without WebView",
   "main": "./src/index.js",
   "source": "./src/index.js",
